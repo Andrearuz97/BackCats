@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +47,17 @@ public class CatBreedController {
 		CatBreed catBreed = convertToEntity(catBreedDTO);
 		CatBreed savedCatBreed = catBreedService.saveCatBreed(catBreed);
 		return convertToDTO(savedCatBreed);
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<CatBreedDTO> updateCatBreed(@PathVariable Long id, @RequestBody CatBreedDTO catBreedDTO) {
+		return catBreedService.findCatBreedById(id).map(catBreed -> {
+			catBreed.setName(catBreedDTO.getName());
+			catBreed.setOrigin(catBreedDTO.getOrigin());
+			catBreed.setDescription(catBreedDTO.getDescription());
+			CatBreed updatedCatBreed = catBreedService.saveCatBreed(catBreed);
+			return new ResponseEntity<>(convertToDTO(updatedCatBreed), HttpStatus.OK);
+		}).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 	@DeleteMapping("/{id}")

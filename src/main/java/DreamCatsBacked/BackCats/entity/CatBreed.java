@@ -15,6 +15,5 @@ public class CatBreed {
 	private String name;
 	private String origin;
 	private String description;
-	// Altri campi
 }
 

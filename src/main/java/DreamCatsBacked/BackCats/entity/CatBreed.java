@@ -15,5 +15,7 @@ public class CatBreed {
 	private String name;
 	private String origin;
 	private String description;
+	private String idealClimate;
+	private String idealFood;
 }
 
